@@ -7,6 +7,11 @@ import { el } from "../utils/dom.js";
 import { time } from "../utils/format.js";
 
 function reportState(run) {
+  if (run.status === "repairing") {
+    return el("div", {class: "stack", id: "run-state"}, status(run.status),
+      el("p", {role: "alert"}, "改号结果待修复，修复完成前不能查阅明细或下载交接单。"),
+      el("a", {class: "button", href: `#evidence/${run.id}`}, "前往恢复"));
+  }
   return el("div", {class: "stack", id: "run-state"}, status(run.status),
     el("p", {}, run.status === "queued" ? "后台正在处理，页面会自动更新。" : run.failure || run.result?.summary),
     run.status === "done" ? el("a", {class: "button", href: `#evidence/${run.id}`}, "查看业务证据") : null);
